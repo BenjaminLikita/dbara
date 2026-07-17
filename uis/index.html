@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dbara Agency — Security by Design</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --graphite:#16181D;
+    --panel:#0E0F12;
+    --panel-raised:#1C1F26;
+    --amber:#F5A623;
+    --amber-dim:#8A5E16;
+    --off-white:#EDEFF2;
+    --slate:#7D8590;
+    --line:#2A2D35;
+    --radius:2px;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:var(--graphite);
+    color:var(--off-white);
+    font-family:'Inter',sans-serif;
+    font-weight:400;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .mono{font-family:'JetBrains Mono',monospace;}
+
+  h1,h2,h3,h4{
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    line-height:1.15;
+  }
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  a{color:inherit;text-decoration:none;}
+
+  header{
+    position:fixed;
+    top:0;left:0;right:0;
+    z-index:100;
+    background:rgba(22,24,29,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 32px;
+    height:76px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .logo{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:'Space Grotesk',sans-serif;
+    font-weight:700;
+    font-size:19px;
+    letter-spacing:0.02em;
+  }
+  .logo .mark{
+    width:28px;height:28px;
+    border:1.5px solid var(--amber);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    position:relative;
+  }
+  .logo .mark::after{
+    content:'';
+    width:8px;height:8px;
+    background:var(--amber);
+    border-radius:50%;
+  }
+  .nav-links{
+    display:flex;
+    gap:40px;
+    font-size:14px;
+    color:var(--slate);
+  }
+  .nav-links a{transition:color .2s;}
+  .nav-links a:hover{color:var(--off-white);}
+  .nav-cta{
+    font-size:13px;
+    font-family:'JetBrains Mono',monospace;
+    border:1px solid var(--amber);
+    color:var(--amber);
+    padding:10px 22px;
+    border-radius:var(--radius);
+    transition:all .25s;
+    letter-spacing:0.04em;
+  }
+  .nav-cta:hover{background:var(--amber);color:var(--panel);}
+
+  @media(max-width:860px){
+    .nav-links{display:none;}
+  }
+
+  .hero{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    position:relative;
+    padding-top:76px;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size:64px 64px;
+    opacity:0.35;
+    -webkit-mask-image:radial-gradient(circle at 70% 50%, rgba(0,0,0,0.9) 0%, transparent 70%);
+    mask-image:radial-gradient(circle at 70% 50%, rgba(0,0,0,0.9) 0%, transparent 70%);
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:60px;
+    align-items:center;
+    width:100%;
+    position:relative;
+    z-index:2;
+  }
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--amber);
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:28px;
+  }
+  .eyebrow::before{
+    content:'';
+    width:28px;height:1px;
+    background:var(--amber);
+  }
+  .hero h1{
+    font-size:clamp(40px,6vw,68px);
+    margin-bottom:24px;
+  }
+  .hero h1 .accent{color:var(--amber);}
+  .hero p.lead{
+    font-size:17px;
+    color:var(--slate);
+    max-width:460px;
+    margin-bottom:36px;
+  }
+  .hero-actions{
+    display:flex;
+    gap:16px;
+    align-items:center;
+    margin-bottom:56px;
+    flex-wrap:wrap;
+  }
+  .btn-primary{
+    background:var(--amber);
+    color:var(--panel);
+    font-weight:600;
+    font-size:14px;
+    padding:16px 32px;
+    border-radius:var(--radius);
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    transition:transform .2s, background .2s;
+  }
+  .btn-primary:hover{background:#ffbe4d;transform:translateY(-1px);}
+  .btn-ghost{
+    font-size:14px;
+    color:var(--off-white);
+    border-bottom:1px solid var(--line);
+    padding-bottom:4px;
+    transition:border-color .2s;
+  }
+  .btn-ghost:hover{border-color:var(--amber);}
+
+  .hero-meta{
+    display:flex;
+    gap:48px;
+    font-family:'JetBrains Mono',monospace;
+    flex-wrap:wrap;
+  }
+  .hero-meta .stat-num{
+    font-size:28px;
+    font-weight:500;
+    color:var(--off-white);
+    margin-bottom:4px;
+  }
+  .hero-meta .stat-label{
+    font-size:11px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--slate);
+  }
+
+  .seal-stage{
+    position:relative;
+    aspect-ratio:1/1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .seal-svg{width:100%;height:100%;max-width:480px;}
+  .seal-ring{
+    transform-origin:center;
+    transform-box:fill-box;
+  }
+  .seal-ring.r1{animation:rotate-cw 60s linear infinite;}
+  .seal-ring.r2{animation:rotate-ccw 90s linear infinite;}
+  .seal-ring.r3{animation:rotate-cw 40s linear infinite;}
+  @keyframes rotate-cw{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
+  @keyframes rotate-ccw{from{transform:rotate(0deg);}to{transform:rotate(-360deg);}}
+
+  .seal-status{
+    position:absolute;
+    bottom:8%;
+    left:50%;
+    transform:translateX(-50%);
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    letter-spacing:0.2em;
+    text-transform:uppercase;
+    color:var(--slate);
+    text-align:center;
+    white-space:nowrap;
+  }
+  .seal-status .dot{
+    display:inline-block;
+    width:6px;height:6px;
+    border-radius:50%;
+    background:var(--amber);
+    margin-right:8px;
+    animation:pulse 2s ease-in-out infinite;
+    vertical-align:middle;
+  }
+  @keyframes pulse{
+    0%,100%{opacity:1;}
+    50%{opacity:0.3;}
+  }
+
+  @media(max-width:900px){
+    .hero-grid{grid-template-columns:1fr;text-align:left;}
+    .seal-stage{max-width:320px;margin:0 auto;order:-1;}
+  }
+
+  section{padding:120px 0;}
+  .section-head{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:40px;
+    align-items:end;
+    margin-bottom:64px;
+  }
+  .section-head h2{font-size:clamp(28px,4vw,42px);}
+  .section-head p{color:var(--slate);font-size:15px;max-width:380px;}
+  .section-label{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--amber);
+    margin-bottom:16px;
+    display:block;
+  }
+  @media(max-width:760px){
+    .section-head{grid-template-columns:1fr;}
+    section{padding:80px 0;}
+  }
+
+  .services-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:1px;
+    background:var(--line);
+    border:1px solid var(--line);
+  }
+  .service-card{
+    background:var(--panel);
+    padding:40px 32px;
+    transition:background .3s;
+    position:relative;
+  }
+  .service-card:hover{background:var(--panel-raised);}
+  .service-card .idx{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    color:var(--amber-dim);
+    margin-bottom:24px;
+    display:block;
+  }
+  .service-card h3{
+    font-size:19px;
+    margin-bottom:12px;
+  }
+  .service-card p{
+    color:var(--slate);
+    font-size:14px;
+  }
+  .service-card .icon{
+    width:40px;height:40px;
+    border:1px solid var(--line);
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:28px;
+    color:var(--amber);
+    transition:border-color .3s, color .3s;
+  }
+  .service-card:hover .icon{border-color:var(--amber);}
+
+  @media(max-width:860px){
+    .services-grid{grid-template-columns:1fr;}
+  }
+
+  .ticker-section{
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    padding:0;
+    overflow:hidden;
+    background:var(--panel);
+  }
+  .ticker-row{
+    display:flex;
+    align-items:center;
+    height:64px;
+    overflow:hidden;
+    white-space:nowrap;
+  }
+  .ticker-track{
+    display:flex;
+    gap:0;
+    animation:ticker-scroll 50s linear infinite;
+  }
+  .ticker-track span{
+    font-family:'JetBrains Mono',monospace;
+    font-size:13px;
+    color:var(--slate);
+    padding:0 32px;
+    border-right:1px solid var(--line);
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+  }
+  .ticker-track span .ok{color:var(--amber);}
+  @keyframes ticker-scroll{
+    from{transform:translateX(0);}
+    to{transform:translateX(-50%);}
+  }
+
+  .approach{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:0;
+    border-top:1px solid var(--line);
+  }
+  .approach-step{
+    padding:48px 28px;
+    border-right:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+    position:relative;
+  }
+  .approach-step:last-child{border-right:none;}
+  .approach-step .phase{
+    font-family:'JetBrains Mono',monospace;
+    font-size:11px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--amber);
+    margin-bottom:20px;
+  }
+  .approach-step h4{font-size:17px;margin-bottom:10px;}
+  .approach-step p{font-size:13.5px;color:var(--slate);}
+
+  @media(max-width:860px){
+    .approach{grid-template-columns:1fr 1fr;}
+    .approach-step:nth-child(2n){border-right:none;}
+  }
+  @media(max-width:560px){
+    .approach{grid-template-columns:1fr;}
+    .approach-step{border-right:none;}
+  }
+
+  .stats-band{
+    background:var(--panel);
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+  }
+  .stats-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    text-align:center;
+  }
+  .stat-block{
+    padding:56px 24px;
+    border-right:1px solid var(--line);
+  }
+  .stat-block:last-child{border-right:none;}
+  .stat-block .big{
+    font-family:'Space Grotesk',sans-serif;
+    font-size:44px;
+    font-weight:700;
+    color:var(--amber);
+    margin-bottom:8px;
+  }
+  .stat-block .lbl{
+    font-size:13px;
+    color:var(--slate);
+    font-family:'JetBrains Mono',monospace;
+    letter-spacing:0.06em;
+  }
+  @media(max-width:760px){
+    .stats-grid{grid-template-columns:1fr 1fr;}
+    .stat-block:nth-child(2n){border-right:none;}
+    .stat-block{border-bottom:1px solid var(--line);}
+  }
+
+  .team-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:32px;
+  }
+  .team-card{
+    border:1px solid var(--line);
+    padding:28px;
+  }
+  .team-photo{
+    width:100%;
+    aspect-ratio:4/3;
+    background:var(--panel-raised);
+    border:1px solid var(--line);
+    margin-bottom:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--line);
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    letter-spacing:0.1em;
+  }
+  .team-card h4{font-size:17px;margin-bottom:4px;}
+  .team-card .role{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    color:var(--amber);
+    letter-spacing:0.05em;
+  }
+  @media(max-width:860px){
+    .team-grid{grid-template-columns:1fr;}
+  }
+
+  .cta{
+    border-top:1px solid var(--line);
+    text-align:center;
+    padding:140px 0;
+    position:relative;
+  }
+  .cta h2{
+    font-size:clamp(32px,6vw,58px);
+    max-width:780px;
+    margin:0 auto 32px;
+  }
+  .cta .accent{color:var(--amber);}
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:64px 0 40px;
+  }
+  .footer-grid{
+    display:grid;
+    grid-template-columns:1.4fr 1fr 1fr 1fr;
+    gap:48px;
+    margin-bottom:56px;
+  }
+  .footer-grid h5{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--slate);
+    margin-bottom:20px;
+  }
+  .footer-grid ul{list-style:none;}
+  .footer-grid li{margin-bottom:12px;font-size:14px;}
+  .footer-grid a{color:var(--off-white);transition:color .2s;}
+  .footer-grid a:hover{color:var(--amber);}
+  .footer-grid p{color:var(--slate);font-size:14px;max-width:280px;}
+  .footer-bottom{
+    border-top:1px solid var(--line);
+    padding-top:28px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:13px;
+    color:var(--slate);
+    font-family:'JetBrains Mono',monospace;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  @media(max-width:860px){
+    .footer-grid{grid-template-columns:1fr 1fr;}
+  }
+  @media(max-width:560px){
+    .footer-grid{grid-template-columns:1fr;}
+  }
+
+  .reveal{
+    opacity:0;
+    transform:translateY(24px);
+    transition:opacity .7s ease, transform .7s ease;
+  }
+  .reveal.visible{
+    opacity:1;
+    transform:translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+    .reveal{opacity:1;transform:none;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo"><span class="mark"></span>Dbara Agency</div>
+    <div class="nav-links">
+      <a href="#services">Services</a>
+      <a href="#approach">Approach</a>
+      <a href="#log">Activity</a>
+      <a href="#team">Team</a>
+    </div>
+    <a href="#contact" class="nav-cta">// Request audit</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Cybersecurity, deliberately</span>
+      <h1>Security is not<br>a feature.<br>It's a <span class="accent">discipline.</span></h1>
+      <p class="lead">Dbara Agency designs, audits, and operates security programs for teams who'd rather close the gap than monitor it. No dashboards for show — just systems that hold.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-primary">Request an audit <span aria-hidden="true">→</span></a>
+        <a href="#approach" class="btn-ghost">See our method</a>
+      </div>
+      <div class="hero-meta">
+        <div>
+          <div class="stat-num">214</div>
+          <div class="stat-label">Systems hardened</div>
+        </div>
+        <div>
+          <div class="stat-num">0</div>
+          <div class="stat-label">Breaches under watch</div>
+        </div>
+        <div>
+          <div class="stat-num">11m</div>
+          <div class="stat-label">Avg. response time</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="seal-stage" aria-hidden="true">
+      <svg class="seal-svg" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="200" cy="200" r="178" stroke="#2A2D35" stroke-width="1"/>
+        <g class="seal-ring r1">
+          <circle cx="200" cy="200" r="150" stroke="#2A2D35" stroke-width="1" stroke-dasharray="2 10"/>
+          <circle cx="200" cy="50" r="3" fill="#F5A623"/>
+          <circle cx="200" cy="350" r="3" fill="#2A2D35"/>
+        </g>
+        <g class="seal-ring r2">
+          <circle cx="200" cy="200" r="118" stroke="#2A2D35" stroke-width="1"/>
+          <path d="M200 82 L210 100 L190 100 Z" fill="#F5A623" opacity="0.7"/>
+        </g>
+        <g class="seal-ring r3">
+          <circle cx="200" cy="200" r="86" stroke="#2A2D35" stroke-width="1" stroke-dasharray="1 6"/>
+        </g>
+        <circle cx="200" cy="200" r="54" stroke="#F5A623" stroke-width="1.5"/>
+        <path d="M200 168 L226 182 V210 L200 232 L174 210 V182 Z" stroke="#F5A623" stroke-width="1.5" fill="#16181D"/>
+        <circle cx="200" cy="200" r="6" fill="#F5A623"/>
+      </svg>
+      <div class="seal-status"><span class="dot"></span>perimeter status — secured</div>
+    </div>
+  </div>
+</section>
+
+<div class="ticker-section">
+  <div class="ticker-row">
+    <div class="ticker-track">
+      <span><span class="ok">✓</span> intrusion attempt blocked — 03:14:09 UTC</span>
+      <span><span class="ok">✓</span> certificate rotation complete — node 7</span>
+      <span><span class="ok">✓</span> dependency scan clean — 1,204 packages</span>
+      <span><span class="ok">✓</span> access review passed — quarterly</span>
+      <span><span class="ok">✓</span> failover test successful — region eu-w1</span>
+      <span><span class="ok">✓</span> intrusion attempt blocked — 03:14:09 UTC</span>
+      <span><span class="ok">✓</span> certificate rotation complete — node 7</span>
+      <span><span class="ok">✓</span> dependency scan clean — 1,204 packages</span>
+      <span><span class="ok">✓</span> access review passed — quarterly</span>
+      <span><span class="ok">✓</span> failover test successful — region eu-w1</span>
+    </div>
+  </div>
+</div>
+
+<section id="services">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="section-label">What we cover</span>
+        <h2>Three layers.<br>One posture.</h2>
+      </div>
+      <p>Each engagement starts narrow — find what's exposed, fix it, and build the habits that keep it closed. We don't sell retainers for problems we haven't found yet.</p>
+    </div>
+  </div>
+
+  <div class="services-grid reveal">
+    <div class="service-card">
+      <span class="idx">A1</span>
+      <div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6l-8-4z"/></svg></div>
+      <h3>Infrastructure audits</h3>
+      <p>Full-stack review of cloud configuration, network segmentation, and identity controls. You get a ranked list of what's actually exploitable, not a 90-page checklist.</p>
+    </div>
+    <div class="service-card">
+      <span class="idx">A2</span>
+      <div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4M21 12v6a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2h11"/></svg></div>
+      <h3>Penetration testing</h3>
+      <p>Manual, scoped attacks against your applications and infrastructure — run by people, not scanners. Every finding ships with a reproduction path and a fix.</p>
+    </div>
+    <div class="service-card">
+      <span class="idx">A3</span>
+      <div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09a1.65 1.65 0 00-1-1.51 1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09a1.65 1.65 0 001.51-1 1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33h0a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82v0a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div>
+      <h3>Managed monitoring</h3>
+      <p>24/7 detection and response, tuned to your environment over the first 30 days so alerts mean something. Escalation paths your team actually uses.</p>
+    </div>
+    <div class="service-card">
+      <span class="idx">A4</span>
+      <div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 3v18h18M7 14l3-3 3 3 5-5"/></svg></div>
+      <h3>Compliance readiness</h3>
+      <p>SOC 2, ISO 27001, and NDPR alignment without the theatre. We map controls to what you've already built and close the real gaps first.</p>
+    </div>
+    <div class="service-card">
+      <span class="idx">A5</span>
+      <div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><path d="M3.27 6.96L12 12l8.73-5.04M12 22.08V12"/></svg></div>
+      <h3>Incident response</h3>
+      <p>On-call retainer for the day something goes wrong. Containment, root cause, and a post-mortem your board can actually read.</p>
+    </div>
+    <div class="service-card">
+      <span class="idx">A6</span>
+      <div class="icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2M12.5 3.5a4 4 0 010 7.07M22 21v-2a4 4 0 00-3-3.87"/></svg></div>
+      <h3>Team training</h3>
+      <p>Practical security workshops for engineers and operations staff — phishing, secrets handling, and incident drills, built around your actual stack.</p>
+    </div>
+  </div>
+</section>
+
+<section id="approach" style="padding-bottom:0;">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="section-label">How we work</span>
+        <h2>Four phases.<br>No skipping ahead.</h2>
+      </div>
+      <p>Order matters here — each phase produces the input the next one needs. We won't propose monitoring before we've confirmed what's worth monitoring.</p>
+    </div>
+  </div>
+  <div class="approach reveal">
+    <div class="approach-step">
+      <div class="phase">Phase 01 — Map</div>
+      <h4>Discover the real surface</h4>
+      <p>Inventory every system, credential, and integration — including the ones nobody remembers setting up.</p>
+    </div>
+    <div class="approach-step">
+      <div class="phase">Phase 02 — Test</div>
+      <h4>Attack it deliberately</h4>
+      <p>Controlled exploitation of what we found, scoped to avoid disruption to live operations.</p>
+    </div>
+    <div class="approach-step">
+      <div class="phase">Phase 03 — Close</div>
+      <h4>Fix what's exploitable</h4>
+      <p>Prioritized remediation, implemented alongside your team rather than handed off as a report.</p>
+    </div>
+    <div class="approach-step">
+      <div class="phase">Phase 04 — Hold</div>
+      <h4>Keep it closed</h4>
+      <p>Monitoring, alerting, and review cadences calibrated to your environment — and revisited quarterly.</p>
+    </div>
+  </div>
+</section>
+
+<div class="stats-band reveal">
+  <div class="wrap">
+    <div class="stats-grid">
+      <div class="stat-block">
+        <div class="big">48</div>
+        <div class="lbl">Active clients</div>
+      </div>
+      <div class="stat-block">
+        <div class="big">6.2k</div>
+        <div class="lbl">Vulnerabilities closed</div>
+      </div>
+      <div class="stat-block">
+        <div class="big">99.97%</div>
+        <div class="lbl">Monitored uptime</div>
+      </div>
+      <div class="stat-block">
+        <div class="big">8</div>
+        <div class="lbl">Years operating</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="team">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div>
+        <span class="section-label">Who's on call</span>
+        <h2>A small team,<br>on purpose.</h2>
+      </div>
+      <p>Every client works directly with the people doing the work — no account managers relaying messages between you and the engineers.</p>
+    </div>
+    <div class="team-grid reveal">
+      <div class="team-card">
+        <div class="team-photo">portrait — 04:01</div>
+        <h4>Adaeze Bara</h4>
+        <div class="role">Founder, offensive security</div>
+      </div>
+      <div class="team-card">
+        <div class="team-photo">portrait — 04:02</div>
+        <h4>Tunde Marek</h4>
+        <div class="role">Lead, infrastructure</div>
+      </div>
+      <div class="team-card">
+        <div class="team-photo">portrait — 04:03</div>
+        <h4>Sena Okoye</h4>
+        <div class="role">Lead, compliance &amp; response</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta" id="contact">
+  <div class="wrap">
+    <span class="section-label" style="text-align:center;display:block;">Start here</span>
+    <h2 class="reveal">Find out what's exposed <span class="accent">before</span> someone else does.</h2>
+    <a href="#" class="btn-primary">Request an audit <span aria-hidden="true">→</span></a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="logo" style="margin-bottom:16px;"><span class="mark"></span>Dbara Agency</div>
+        <p>Security audits, testing, and managed monitoring for teams who'd rather fix the gap than report on it.</p>
+      </div>
+      <div>
+        <h5>Services</h5>
+        <ul>
+          <li><a href="#">Infrastructure audits</a></li>
+          <li><a href="#">Penetration testing</a></li>
+          <li><a href="#">Managed monitoring</a></li>
+          <li><a href="#">Incident response</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Company</h5>
+        <ul>
+          <li><a href="#approach">Approach</a></li>
+          <li><a href="#team">Team</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Contact</h5>
+        <ul>
+          <li><a href="#">hello@dbaraagency.com</a></li>
+          <li><a href="#">+234 800 200 1199</a></li>
+          <li><a href="#">Abuja, Nigeria</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Dbara Agency</span>
+      <span>status: all systems secured</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if(e.isIntersecting){
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  reveals.forEach(el => obs.observe(el));
+</script>
+
+</body>
+</html>

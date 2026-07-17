@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+@theme {
+  --font-heading: "Poppins", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-sora: "Sora", sans-serif;
+
+  --color-primary: #132431;
+  --color-navy-950: #0a1422;
+  --color-navy-900: #0d1f33;
+  --color-navy-800: #13314f;
+  --color-navy-700: #1c4870;
+  --color-bg-light: #eef1f4;
+  --color-card-light: #ffffff;
+  --color-text-dark: #1c2733;
+  --color-text-muted: #5f6f7e;
+  --color-faint: #9aa8b5;
+  --color-accent-green: #3ddc97;
+  --color-accent-yellow: #f4e04d;
+  --color-accent-indigo: #8489f0;
+  --color-accent-indigo-soft: #dfe2fb;
+  --color-accent-teal: #3ad6c4;
+
+  --radius-xl: 56px;
+  --radius-lg: 28px;
+  --radius-md: 18px;
+  --radius-sm: 12px;
+
+  --animate-pulse-dot: pulse-dot 3.5s ease-in-out infinite;
+  --animate-float-core: float-core 5s ease-in-out infinite;
+  --animate-float-icon: float-icon 6s ease-in-out infinite;
+  --animate-spin-slow: spin-slow 16s linear infinite;
+}
+
+:root {
+  --accent-gradient: linear-gradient(100deg, #3ddc97, #f4e04d);
+  --line-soft: rgba(255, 255, 255, 0.08);
+  --line-soft-dark: rgba(28, 39, 51, 0.08);
+  --bg-hero:
+    radial-gradient(
+      1000px 4020px at 90% 5%,
+      /* rgba(98, 140, 210, 0.35), */ #01427d,
+      transparent 60%
+    ),
+    linear-gradient(
+      165deg,
+      var(--color-navy-900) 45%,
+      #0b1825 0%,
+      var(--color-navy-900) 45%,
+      var(--color-navy-950) 100%
+    );
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply font-body text-text-dark bg-bg-light leading-relaxed overflow-x-hidden antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-sora font-bold leading-[1.15] tracking-tight;
+  }
+
+  img {
+    @apply max-w-full block;
+  }
+
+  a {
+    @apply text-inherit no-underline;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+@keyframes float-core {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes float-icon {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
